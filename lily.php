@@ -1,5 +1,7 @@
 <?php
 
+require 'style.php';
+
 class Expectation {
     function __construct($value) {
         $this->value = $value;
@@ -32,17 +34,21 @@ class ExpectationFailException extends Exception {
 }
 
 function describe($thing, $specs) {
+    global $RED, $RESET_ALL;
     try {
+        echo("$thing\r\n");
         $specs();
     }
     catch (ExpectationFailException $e) {
-        die("$thing $e->feature, {$e->getMessage()}");
+        die("$RED$e->feature, {$e->getMessage()}$RESET_ALL\r\n");
     }
 }
 
 function it($feature, $spec) {
+    global $GREEN, $RESET_ALL;
     try {
         $spec();
+        echo "$GREEN$feature $RESET_ALL\r\n";
     }
     catch (Exception $e) {
         throw new ExpectationFailException(
